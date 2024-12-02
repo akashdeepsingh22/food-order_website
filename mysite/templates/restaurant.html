@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Menu</title>
+</head>
+<body>
+    <h1>Our Menu</h1>
+    <ul>
+    {% for item in items %}
+        <li>
+            <h3>{{ item.name }}</h3>
+            <p>{{ item.description }}</p>
+            <p>${{ item.price }}</p>
+            <form action="{% url 'place_order' %}" method="get">
+                <button type="submit">Order Now</button>
+            </form>
+        </li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
