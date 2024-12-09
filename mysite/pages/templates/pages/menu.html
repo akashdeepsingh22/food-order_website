@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Food Ordering Website</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'menu' %}">Menu</a></li>
+            <li><a href="{% url 'order' %}">Order</a></li>
+            <li><a href="{% url 'contact' %}">Contact</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
+        </ul>
+    </nav>
+
+    <section class="menu">
+        <h2>Our Delicious Menu</h2>
+        <ul>
+            <li>Burger - $5.99</li>
+            <li>Pizza - $8.99</li>
+            <li>Salad - $4.99</li>
+            <li>Sandwich - $6.49</li>
+        </ul>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Food Ordering Website</p>
+    </footer>
+
+    <script src="/static/javascripts/script.js"></script>
+</body>
+</html>

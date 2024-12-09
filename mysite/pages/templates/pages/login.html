@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Food Ordering Website</title>
+    <link rel="stylesheet" href="/static/style.css/javascripts/script.js">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'menu' %}" id="menu-link" class="disabled">Menu</a></li>
+            <li><a href="{% url 'order' %}" id="order-link" class="disabled">Order</a></li>
+            <li><a href="{% url 'contact' %}" id="contact-link">Contact</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
+        </ul>
+    </nav>
+    
+    <section class="login-form">
+        <h2>Login to Your Account</h2>
+        <form action="javascript:void(0)" onsubmit="loginUser()">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            
+            <button type="submit">Login</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Food Ordering Website</p>
+    </footer>
+
+    <script src="/static/javascripts/script.js"></script>
+</body>
+</html>
+

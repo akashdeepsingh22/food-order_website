@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - Food Ordering Website</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'menu' %}">Menu</a></li>
+            <li><a href="{% url 'contact' %}">contact</a></li>
+            <li><a href="{% url 'login' %}" id="loginLink">Login</a></li>
+            <li><a href="{% url 'logout' %}" id="logoutLink" style="display: none;">Logout</a></li>
+        </ul>
+    </nav>
+    <div class="content">
+        <h1>Your Cart</h1>
+        <p>Your selected items will appear here.</p>
+    </div>
+
+    <script src="/javascripts/script.js"></script>
+</body>
+</html>

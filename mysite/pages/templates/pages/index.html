@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Ordering Website</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'menu' %}" id="menu-link" class="disabled">Menu</a></li>
+            <li><a href="{% url 'order' %}" id="order-link" class="disabled">Order</a></li>
+            <li><a href="{% url 'contact' %}" id="contact-link">Contact</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
+        </ul>
+    </nav>
+    
+    <header>
+        <h1>Welcome to Our Food Ordering Service</h1>
+        <p>Order your favorite food from a variety of menus</p>
+    </header>
+
+    <section class="slideshow">
+        <div class="slides">
+            <img src="/static/images/pizza-3007395_1280.jpg" alt="Food 1" class="slide">
+            <img src="/static/images/burger-8578288_1280.jpg" alt="Food 2" class="slide">
+            <img src="food3.jpg" alt="Food 3" class="slide">
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Food Ordering Website</p>
+    </footer>
+
+    <script src="/static/javascripts/script.js"></script>
+</body>
+</html>
+
