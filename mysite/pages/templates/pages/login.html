@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Food Ordering Website</title>
-    <link rel="stylesheet" href="/static/style.css/javascripts/script.js">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <nav>
@@ -16,25 +16,27 @@
             <li><a href="{% url 'login' %}">Login</a></li>
         </ul>
     </nav>
+    <h2>Login</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
     
-    <section class="login-form">
-        <h2>Login to Your Account</h2>
-        <form action="javascript:void(0)" onsubmit="loginUser()">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            
-            <button type="submit">Login</button>
-        </form>
-    </section>
 
     <footer>
         <p>&copy; 2024 Food Ordering Website</p>
     </footer>
 
-    <script src="/static/javascripts/script.js"></script>
+    
 </body>
 </html>
 

@@ -11,10 +11,11 @@
     <nav class="navbar">
         <ul>
             <li><a href="{% url 'index' %}">Home</a></li>
-            <li><a href="{% url 'menu' %}">Menu</a></li>
-            <li><a href="{% url 'contact' %}">contact</a></li>
-            <li><a href="{% url 'login' %}" id="loginLink">Login</a></li>
-            <li><a href="{% url 'logout' %}" id="logoutLink" style="display: none;">Logout</a></li>
+            <li><a href="{% url 'menu' %}" id="menu-link" class="disabled">Menu</a></li>
+            <li><a href="{% url 'order' %}" id="order-link" class="disabled">Order</a></li>
+            <li><a href="{% url 'contact' %}" id="contact-link">Contact</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
+    
         </ul>
     </nav>
     <div class="content">

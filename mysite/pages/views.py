@@ -1,10 +1,39 @@
-from django.shortcuts import render
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.shortcuts import render, redirect 
+from django.http import HttpResponse 
+def signup(request):
+
+    if request.method == 'POST':
+        username = request.POST.get('username')  # Use .get() to avoid KeyError
+        password = request.POST.get('password')
+        email = request.POST.get('email')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'Username already exists')
+            return redirect('signup')
+        elif User.objects.filter(email=email).exists():
+            messages.error(request, 'Email already exists')
+            return redirect('signup')
+        else:
+            user = User.objects.create_user(
+                username=username, email=email, password=password)
+            user.save()
+            messages.success(request, 'Account created successfully')
+            return HttpResponse('login')
+
+def user_login(request):
+   
+
+    return render(request, 'pages/loginpage.html')
 
 # View for the home page
 def index(request):
     return render(request, 'pages/index.html')
 
 # View for the menu page
+
 def menu(request):
     return render(request, 'pages/menu.html')
 
