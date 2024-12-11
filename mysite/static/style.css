@@ -90,7 +90,7 @@ button:hover {
 
 .slides img {
     height: auto; /* Maintain the aspect ratio of the images */
-    width: auto; /* Let the images retain their natural width */
+    width: auto       ; /* Let the images retain their natural width */
     max-width: 100%; /* Ensure images do not exceed container width */
 }
 

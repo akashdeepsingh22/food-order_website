@@ -10,9 +10,9 @@
     <nav>
         <ul>
             <li><a href="{% url 'index' %}">Home</a></li>
-            <li><a href="{% url 'menu' %}" id="menu-link" class="disabled">Menu</a></li>
-            <li><a href="{% url 'order' %}" id="order-link" class="disabled">Order</a></li>
-            <li><a href="{% url 'contact' %}" id="contact-link">Contact</a></li>
+            <li><a href="{% url 'menu' %}" >Menu</a></li>
+            <li><a href="{% url 'order' %}" >Order</a></li>
+            <li><a href="{% url 'contact' %}">Contact</a></li>
             <li><a href="{% url 'login' %}">Login</a></li>
         </ul>
     </nav>
@@ -20,6 +20,8 @@
     <header>
         <h1>Welcome to Our Food Ordering Service</h1>
         <p>Order your favorite food from a variety of menus</p>
+        <br>
+        <button>CHECK ITEMS</button>
     </header>
 
     <section class="slideshow">
@@ -33,6 +35,7 @@
     <footer>
         <p>&copy; 2024 Food Ordering Website</p>
     </footer>
+    <script src="/static/javascripts/script.js"></script>
 
 
 </body>

@@ -2,25 +2,6 @@
 function isLoggedIn() {
     return localStorage.getItem("loggedIn") === "true";
 }
-
-// Redirect to login page if not logged in
-window.onload = function() {
-    const menuLink = document.getElementById("menu-link");
-    const orderLink = document.getElementById("order-link");
-    const contactLink = document.getElementById("contact-link");
-
-    if (isLoggedIn()) {
-        // Enable menu and order links
-        menuLink.classList.remove("disabled");
-        orderLink.classList.remove("disabled");
-    } else {
-        // Disable menu and order links
-        menuLink.classList.add("disabled");
-        orderLink.classList.add("disabled");
-        contactLink.classList.add("disabled");
-    }
-};
-
 // Handle login
 function loginUser() {
     const username = document.getElementById("username").value;
