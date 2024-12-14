@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>manus of categories food</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'menu' %}" id="menu-link" class="disabled">Menu</a></li>
+            <li><a href="{% url 'order' %}" id="order-link" class="disabled">Order</a></li>
+            <li><a href="{% url 'contact' %}" id="contact-link">Contact</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
+    
+        </ul>
+    </nav>
+    <section class="menu">
+        <h2>Our Delicious Menu</h2>
+        <div class="menu-grid">
+            <div class="menu-item">
+                <img src="/static/images/cornpizza.jpeg" alt="Waffles" class="menu-image">
+                <h3>Corn Pizza</h3>
+                <p>A classic pizza with fresh ingredients, crispy crust, and gooey cheese.</p>
+            </div>
+            <div class="menu-item">
+                <img src="/static/images/pannerpizza.jpg" alt="Pizza" class="menu-image">
+                <h3>Panner Pizza</h3>
+                <p>A classic pizza with fresh ingredients, crispy crust, and gooey cheese.</p>     
+            </div>
+            <div class="menu-item">
+                <img src="/static/images/dish3.jpg" alt="Dish 3" class="menu-image">
+                <h3>Dish Name 3</h3>
+                <p>Explore our exquisite selection of dishes made from the finest ingredients.</p>              
+            </div>
+            <div class="menu-item">
+                <img src="/static/images/dish4.jpg" alt="Dish 4" class="menu-image">
+                <h3>Dish Name 4</h3>
+                <p>A savory delight, packed with flavor and perfectly cooked to perfection.</p>
+            
+            </div>
+            <div class="menu-item">
+                <img src="/static/images/dish5.jpg" alt="Dish 5" class="menu-image">
+                <h3>Dish Name 5</h3>
+                <p>A fresh, healthy option, perfect for those seeking a lighter meal.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Food Ordering Website</p>
+    </footer>
+    <script src="/static/javascripts/script.js"></script>
+</body>
+</html>

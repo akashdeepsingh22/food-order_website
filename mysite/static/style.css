@@ -65,7 +65,7 @@ section {
 }
 
 button {
-    background-color: #28a745;
+    background-color:  #ff7f50;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -73,12 +73,12 @@ button {
 }
 
 button:hover {
-    background-color: #218838;
+    background-color:  #ff7f50;
 }
 
 .slideshow {
     width: 100%;
-    max-width: 800px; /* Maximum width of the slideshow */
+    max-width: 800px; 
     margin: auto;
     overflow: hidden;
 }
@@ -89,15 +89,21 @@ button:hover {
 }
 
 .slides img {
-    height: auto; /* Maintain the aspect ratio of the images */
-    width: auto       ; /* Let the images retain their natural width */
-    max-width: 100%; /* Ensure images do not exceed container width */
+    height: auto; 
+    width: auto ;
+    max-width: 100%; 
 }
-
-/* Optional: You can add media queries to handle very small screens */
 @media (max-width: 600px) {
     .slideshow {
-        max-width: 100%; /* Allow the slideshow to take full width on smaller screens */
+        max-width: 100%; 
     }
 }
+
+
+
+
+
+
+
+
 

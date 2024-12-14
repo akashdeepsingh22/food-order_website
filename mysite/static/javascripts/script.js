@@ -32,3 +32,9 @@ function showSlide() {
 
 setInterval(showSlide, 3000); // Change image every 3 seconds
 showSlide(); // Initial display
+
+
+
+
+
+
