@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ menu_item.name }} - Menu Item</title>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'menu' %}">Menu</a></li>
+            <li><a href="{% url 'order' %}">Order</a></li>
+            <li><a href="{% url 'contact' %}">Contact</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
+        </ul>
+    </nav>
+
+    <section class="menu-item-detail">
+        <h2>{{ menu_item.name }}</h2>
+        <img src="{{ menu_item.image.url }}" alt="{{ menu_item.name }}" class="menu-image">
+        <p>{{ menu_item.description }}</p>
+
+        <!-- Add your form or menu options for adding products or modifying menu here -->
+        <!-- Example: -->
+        <button>Add New Product to this Menu</button>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Food Ordering Website</p>
+    </footer>
+</body>
+
+</html>

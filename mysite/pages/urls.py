@@ -10,5 +10,6 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('viewmanu/',views.viewmanu,name='viewmanu'),
     path('pizzamanu/',views.pizzamanu,name='pizzamanu'),
+    path('menu/<slug:slug>/', views.menu_item_detail, name='menu_item_detail'),
 
 ]

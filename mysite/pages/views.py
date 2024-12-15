@@ -1,7 +1,10 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.shortcuts import render, redirect 
+from django.shortcuts import render, get_object_or_404
+from .models import MenuItem
 from django.http import HttpResponse 
 def signup(request):
 
@@ -41,9 +44,8 @@ def user_login(request):
 
 def index(request):
     return render(request, 'pages/index.html')
-
-def menu(request):
     
+def menu(request):
     return render(request, 'pages/menu.html')
 
 def order(request):
@@ -58,5 +60,8 @@ def viewmanu(request):
     return render(request, 'pages/viewmanu.html')
 def pizzamanu(request):
     return render(request, 'pages/pizzamanu.html')
+def menu_item_detail(request, slug):
+    menu_item = get_object_or_404(MenuItem, slug=slug)
+    return render(request, 'menu_item_detail.html', {'menu_item': menu_item})
 
 

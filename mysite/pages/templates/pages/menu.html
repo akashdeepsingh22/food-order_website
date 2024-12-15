@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu - Food Ordering Website</title>
     <link rel="stylesheet" href="/static/menupage.css">
 </head>
+
 <body>
     <nav>
         <ul>
@@ -20,43 +22,147 @@
     <section class="menu">
         <h2>Our Delicious Menu</h2>
     
-        <div class="menu-grid">
+        <div class="menu-grid" id="menu-grid">
             <div class="menu-item">
                 <img src="/static/images/burgers.jpg" alt="Dish 1" class="menu-image">
                 <h3>BURGERS</h3>
                 <p>Delicious description of dish 1.</p>
-                <button><a href="{% url 'viewmanu' %}" style="text-decoration: none;color:white;">view manu</a></button>
+                <button><a href="{% url 'viewmanu' %}" style="text-decoration: none;color:white;">View Menu</a></button>
+                <button class="delete-btn">Delete</button> 
             </div>
     
             <div class="menu-item">
                 <img src="/static/images/pizza-3007395_1280.jpg" alt="Dish 2" class="menu-image">
                 <h3>PIZZAS</h3>
                 <p>Delicious description of dish 2.</p>
-                <button><a href="{% url 'pizzamanu' %}" style="text-decoration: none;color:white;">view manu</a></button>      
-            </div>
-    
-            <div class="menu-item">
-                <img src="dish3.jpg" alt="Dish 3" class="menu-image">
-                <h3>Dish Name 3</h3>
-                <p>Delicious description of dish 3.</p>
-                <button><a href="{% url 'viewmanu' %}" style="text-decoration: none;color:white;">view manu</a></button>      
-            </div>
-    
-            <div class="menu-item">
-                <img src="dish4.jpg" alt="Dish 4" class="menu-image">
-                <h3>Dish Name 4</h3>
-                <p>Delicious description of dish 4.</p>
-                <button><a href="{% url 'viewmanu' %}" style="text-decoration: none;color:white;">view manu</a></button>
-            </div>
-    
-            <div class="menu-item">
-                <img src="dish5.jpg" alt="Dish 5" class="menu-image">
-                <h3>Dish Name 5</h3>
-                <p>Delicious description of dish 5.</p>
-                <button><a href="{% url 'viewmanu' %}" style="text-decoration: none;color:white;">view manu</a></button>
+                <button><a href="{% url 'pizzamanu' %}" style="text-decoration: none;color:white;">View Menu</a></button>      
+                <button class="delete-btn">Delete</button> 
             </div>
         </div>
+
+        <button id="add-menu-btn" class="add-menu-btn" style="background-color: #2a9d8f; color: white; padding: 10px 20px; margin-top: 20px; border: none; cursor: pointer;">Add New Menu</button>
+        
+        <div id="new-menu-form" style="display:none; margin-top: 20px;">
+            <h3>Add New Dish</h3>
+            <form id="menu-form">
+                <label for="dish-name">Dish Name:</label>
+                <input type="text" id="dish-name" placeholder="Enter dish name" required>
+                <br><br>
+                <label for="dish-description">Dish Description:</label>
+                <textarea id="dish-description" placeholder="Enter dish description" required></textarea>
+                <br><br>
+                <label for="dish-image">Dish Image:</label>
+                <input type="file" id="dish-image" accept="image/*" required>
+                <br><br>
+                <img id="image-preview" src="" alt="Image Preview" style="display:none; width: 150px; height: 150px; object-fit: cover;">
+                <br><br>
+                <button type="submit" style="background-color: #2a9d8f; color: white; padding: 10px 20px; border: none; cursor: pointer;">Add Dish</button>
+            </form>
+        </div>
     </section>
+
+    <script>
+        // Toggle form visibility when 'Add New Menu' button is clicked
+        document.getElementById('add-menu-btn').addEventListener('click', function () {
+            const form = document.getElementById('new-menu-form');
+            form.style.display = form.style.display === 'none' || form.style.display === '' ? 'block' : 'none';
+        });
+
+        // Handle the image preview when a file is selected
+        document.getElementById('dish-image').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('image-preview');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block'; // Show the image preview
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none'; // Hide the image preview if no file is selected
+            }
+        });
+
+        // Handle form submission to add the new dish to the menu
+        document.getElementById('menu-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const dishName = document.getElementById('dish-name').value;
+            const dishDescription = document.getElementById('dish-description').value;
+            const dishImage = document.getElementById('image-preview').src; // Get the image preview source
+
+            // Check if an image was selected
+            if (!dishImage || dishImage === 'none') {
+                alert('Please upload an image for the dish!');
+                return;
+            }
+
+            const menuGrid = document.getElementById('menu-grid');
+            const newMenuItem = document.createElement('div');
+            newMenuItem.classList.add('menu-item');
+
+            const dishUrl = dishName.toLowerCase().replace(/\s+/g, '-') + '-menu';  
+
+            newMenuItem.innerHTML = `
+                <img src="${dishImage}" alt="${dishName}" class="menu-image">
+                <h3>${dishName}</h3>
+                <p>${dishDescription}</p>
+                <button><a href="{% url 'viewmanu' %}?dish=${dishUrl}" style="text-decoration: none;color:white;">View Menu</a></button>
+                <button class="delete-btn">Delete</button> <!-- Added Delete Button -->
+            `;
+
+            menuGrid.appendChild(newMenuItem);
+            document.getElementById('menu-form').reset();
+            document.getElementById('image-preview').style.display = 'none'; // Hide the image preview
+            document.getElementById('new-menu-form').style.display = 'none'; // Hide the form after submission
+        });
+
+        // Handle the delete button click event
+        document.getElementById('menu-grid').addEventListener('click', function (event) {
+            if (event.target && event.target.classList.contains('delete-btn')) {
+                const menuItem = event.target.closest('.menu-item'); 
+                menuItem.remove(); 
+            }
+        });
+
+        
+        document.getElementById('menu-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const dishName = document.getElementById('dish-name').value;
+    const dishDescription = document.getElementById('dish-description').value;
+    const dishImage = document.getElementById('image-preview').src;
+
+    // Check if an image was selected
+    if (!dishImage || dishImage === 'none') {
+        alert('Please upload an image for the dish!');
+        return;
+    }
+
+    // Convert the dish name to a slug (lowercase and replace spaces with dashes)
+    const dishSlug = dishName.toLowerCase().replace(/\s+/g, '-');
+
+    const menuGrid = document.getElementById('menu-grid');
+    const newMenuItem = document.createElement('div');
+    newMenuItem.classList.add('menu-item');
+
+    newMenuItem.innerHTML = `
+        <img src="${dishImage}" alt="${dishName}" class="menu-image">
+        <h3>${dishName}</h3>
+        <p>${dishDescription}</p>
+        <button><a href="/menu/${dishSlug}/" style="text-decoration: none;color:white;">View Menu</a></button>
+        <button class="delete-btn">Delete</button>
+    `;
+
+    menuGrid.appendChild(newMenuItem);
+    document.getElementById('menu-form').reset();
+    document.getElementById('image-preview').style.display = 'none';
+    document.getElementById('new-menu-form').style.display = 'none';
+});
+
+    </script>
 
     <footer>
         <p>&copy; 2024 Food Ordering Website</p>
@@ -64,5 +170,5 @@
 
     <script src="/static/javascripts/script.js"></script>
 </body>
-</html>
 
+</html>

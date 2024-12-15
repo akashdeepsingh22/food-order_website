@@ -3,32 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order - Food Ordering Website</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <title>Order Summary</title>
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="{% url 'index' %}">Home</a></li>
-            <li><a href="{% url 'menu' %}">Menu</a></li>
-            <li><a href="{% url 'order' %}">Order</a></li>
-            <li><a href="{% url 'contact' %}">Contact</a></li>
-            <li><a href="{% url 'login' %}">Login</a></li>
-        </ul>
-    </nav>
+    <h2>Your Order Summary</h2>
 
-    <section class="order">
-        <h2>Your Order</h2>
-        <p>Selected Item: Pizza</p>
-        <p>Quantity: 1</p>
-        <p>Total: $8.99</p>
-        <button>Proceed to Checkout</button>
-    </section>
+    <div id="order-summary">
+        <ul id="order-list"></ul>
+        <button onclick="placeOrder()">Place Order</button>
+    </div>
 
-    <footer>
-        <p>&copy; 2024 Food Ordering Website</p>
-    </footer>
+    <script>
+        // Get the selected items from localStorage
+        let selectedItems = JSON.parse(localStorage.getItem('orderItems'));
 
-    <script src="/static/javascripts/script.js"></script>
+        if (selectedItems && selectedItems.length > 0) {
+            const orderList = document.getElementById('order-list');
+            
+            // Loop through the selected items and display them
+            selectedItems.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = `${item.name} - Quantity: ${item.quantity}, Price: ${item.price * item.quantity}`;
+                orderList.appendChild(li);
+            });
+        } else {
+            document.getElementById('order-summary').innerHTML = "No items found in your order.";
+        }
+
+        // Function to place the order
+        function placeOrder() {
+            alert("Order placed successfully!");
+            localStorage.removeItem('orderItems'); // Clear the order after placing
+        }
+    </script>
 </body>
 </html>

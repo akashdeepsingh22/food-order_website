@@ -19,3 +19,11 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order by {self.customer_name} for {self.food_item.name}"
+class MenuItem(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    image = models.ImageField(upload_to='menu_images/')
+    slug = models.SlugField(unique=True)
+
+    def __str__(self):
+        return self.name    
