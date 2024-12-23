@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Summary</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .summary-container {
+            padding: 20px;
+        }
+
+        .summary-item {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .summary-item img {
+            max-width: 100px;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .summary-details {
+            flex: 1;
+            padding-left: 20px;
+        }
+
+        .summary-details h3 {
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        .summary-details p {
+            margin: 5px 0;
+            color: #777;
+        }
+
+        .total-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2d6a4f;
+            text-align: right;
+        }
+
+        .checkout-btn {
+            background-color: #2d6a4f;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .checkout-btn:hover {
+            background-color: #1f4e3d;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="summary-container">
+        <h2>Order Summary</h2>
+        
+        {% for item, quantity in items.items %}
+            <div class="summary-item">
+                <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                <div class="summary-details">
+                    <h3>{{ item.name }}</h3>
+                    <p>Price: ${{ item.price }}</p>
+                    <p>Quantity: {{ quantity }}</p>
+                    <p>Total: ${{ item.price|multiply:quantity }}</p>
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="total-price">
+            Total Price: ${{ total_price }}
+        </div>
+
+        <!-- Final Checkout Button -->
+        <button class="checkout-btn">Confirm Purchase</button>
+    </div>
+
+</body>
+</html>

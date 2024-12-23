@@ -85,34 +85,6 @@ button a {
     font-weight: bold;
 }
 
-.slideshow {
-    width: 100%;
-    max-width: 800px; 
-    margin: auto;
-    overflow: hidden;
-}
-
-.slides {
-    display: flex;
-    transition: all 1s ease-in-out;
-}
-
-.slides img {
-    height: auto; 
-    width: auto ;
-    max-width: 100%; 
-}
-@media (max-width: 600px) {
-    .slideshow {
-        max-width: 100%; 
-    }
-}
-
-
-
-
-
-
 /* Style for the menu container */
 .menu {
     padding: 50px 20px;

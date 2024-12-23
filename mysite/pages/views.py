@@ -58,8 +58,6 @@ def login(request):
     return render(request, 'pages/login.html')
 def viewmanu(request):
     return render(request, 'pages/viewmanu.html')
-def pizzamanu(request):
-    return render(request, 'pages/pizzamanu.html')
 def menu_item_detail(request, slug):
     menu_item = get_object_or_404(MenuItem, slug=slug)
     return render(request, 'menu_item_detail.html', {'menu_item': menu_item})

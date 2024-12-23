@@ -10,15 +10,13 @@ class FoodItem(models.Model):
         return self.name
 
 class Order(models.Model):
-    food_item = models.ForeignKey(FoodItem, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
-    total_price = models.DecimalField(max_digits=6, decimal_places=2)
-    customer_name = models.CharField(max_length=100)
-    customer_email = models.EmailField()
-    customer_address = models.TextField()
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    address = models.TextField()
+    phone = models.CharField(max_length=15)
 
     def __str__(self):
-        return f"Order by {self.customer_name} for {self.food_item.name}"
+        return self.name
 class MenuItem(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
