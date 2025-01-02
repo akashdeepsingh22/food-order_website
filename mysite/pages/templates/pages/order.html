@@ -66,6 +66,29 @@
         .submit-btn:hover {
             background-color: #1f4e3d;
         }
+
+        .order-summary {
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .order-summary h3 {
+            margin-bottom: 15px;
+        }
+
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+
+        .total-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
@@ -73,8 +96,9 @@
     <div class="order-container">
         <h2>Place Your Order</h2>
 
-        <form>
+        <form method="POST">
             {% csrf_token %}
+            
             <!-- Customer Details -->
             <label for="name">Full Name:</label>
             <input type="text" id="name" name="name" class="form-input" required>
@@ -87,14 +111,24 @@
 
             <label for="phone">Phone Number:</label>
             <input type="text" id="phone" name="phone" class="form-input" required>
-            {% csrf_token %}
-            {{ form.as_p }}
-            {% for field in form %}
-                {% if field.errors %}
-                    <div class="errors">{{ field.errors }}</div>
-                {% endif %}
-            {% endfor %}
-
+            
+            <!-- Displaying Selected Items -->
+            <div class="order-summary">
+                <h3>Your Order Summary</h3>
+                {% for item in selected_items %}
+                    <div class="item-row">
+                        <span>{{ item.name }}</span>
+                        <span>x{{ item.quantity }}</span>
+                        <span>${{ item.price }}</span>
+                    </div>
+                {% endfor %}
+                
+                <!-- Total Price -->
+                <div class="total-price">
+                    Total: $<span id="total-price">{{ total_price }}</span>
+                </div>
+            </div>
+            
             <!-- Submit Button -->
             <button type="submit" class="submit-btn">Place Order</button>
         </form>

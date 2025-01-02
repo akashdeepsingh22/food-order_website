@@ -175,7 +175,7 @@ nav ul li a:hover {
         </form>
     </div>
 
-    <form method="POST" action="{% url 'buy_items' %}">
+    <form method="POST" action="{% url 'buy_items' %}" id="buyForm">
         {% csrf_token %}
         <div class="menu-container">
             {% for fooditem in manuitems %}
@@ -197,5 +197,15 @@ nav ul li a:hover {
         </div>
     </form>
 
+    <script>
+        // JavaScript to check if any checkbox is selected before submitting the form
+        document.getElementById('buyForm').addEventListener('submit', function(event) {
+            var selectedItems = document.querySelectorAll('input[name="selected_items"]:checked');
+            if (selectedItems.length === 0) {
+                alert('Please select at least one item before proceeding.');
+                event.preventDefault(); // Prevent form submission
+            }
+        });
+    </script>
 </body>
 </html>
