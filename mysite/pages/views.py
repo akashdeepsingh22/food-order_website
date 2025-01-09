@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect 
 from django.shortcuts import render, get_object_or_404
 from .models import MenuItem
+from fooditems.models import fooditems
 from django.http import HttpResponse 
 def signup(request):
 
@@ -49,7 +50,15 @@ def menu(request):
     return render(request, 'pages/menu.html')
 
 def order(request):
-    return render(request, 'pages/order.html')
+    if request.method == 'POST':
+        selected_item_ids = request.POST.getlist('selected_items')  # Get list of selected item IDs
+        selected_items = fooditems.objects.filter(id__in=selected_item_ids)
+
+        # You can add logic here to process the purchase (e.g., create an order, charge the user, etc.)
+        # For now, we'll just redirect to a success page
+        return render(request, 'pages/order.html', {'selected_items': selected_items})
+    return redirect('manu')  # If not POST, redirect to the menu page
+
 
 def contact(request):
     return render(request, 'pages/contact.html')

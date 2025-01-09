@@ -31,7 +31,8 @@ def manu(request):
     return render(request, 'fooditems/manu.html', {'manuitems': manuitems})
 
 
-def buy_items(request):
+def buy_items(request): 
+    print("buy items view")
     if request.method == 'POST':
         selected_item_ids = request.POST.getlist('selected_items')  # Get list of selected item IDs
         selected_items = fooditems.objects.filter(id__in=selected_item_ids)
@@ -43,6 +44,7 @@ def buy_items(request):
 
 
 def order_success(request):
+    print("order success view")
     # Get the selected items passed from the previous page
     if request.method == 'POST':
         selected_item_ids = request.POST.getlist('selected_items')

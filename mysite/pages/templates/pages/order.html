@@ -92,27 +92,6 @@
     </style>
 </head>
 <body>
-
-    <div class="order-container">
-        <h2>Place Your Order</h2>
-
-        <form method="POST">
-            {% csrf_token %}
-            
-            <!-- Customer Details -->
-            <label for="name">Full Name:</label>
-            <input type="text" id="name" name="name" class="form-input" required>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" class="form-input" required>
-
-            <label for="address">Delivery Address:</label>
-            <textarea id="address" name="address" class="form-input" required></textarea>
-
-            <label for="phone">Phone Number:</label>
-            <input type="text" id="phone" name="phone" class="form-input" required>
-            
-            <!-- Displaying Selected Items -->
             <div class="order-summary">
                 <h3>Your Order Summary</h3>
                 {% for item in selected_items %}
