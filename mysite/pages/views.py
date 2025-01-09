@@ -1,16 +1,13 @@
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.shortcuts import render, redirect 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import MenuItem
 from fooditems.models import fooditems
-from django.http import HttpResponse 
-def signup(request):
 
+def signup(request):
     if request.method == 'POST':
-        username = request.POST.get('username')  # Use .get() to avoid KeyError
+        username = request.POST.get('username')
         password = request.POST.get('password')
         email = request.POST.get('email')
 
@@ -21,54 +18,53 @@ def signup(request):
             messages.error(request, 'Email already exists')
             return redirect('signup')
         else:
-            user = User.objects.create_user(
-                username=username, email=email, password=password)
+            user = User.objects.create_user(username=username, email=email, password=password)
             user.save()
             messages.success(request, 'Account created successfully')
-            return HttpResponse('login')
+            return redirect('login')
+    return render(request, 'pages/signup.html')
 
 def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
-            print('Login successful!')
-            return redirect('index')
+            return redirect('manu')
         else:
             messages.error(request, 'Invalid username or password')
+            return render(request, 'pages/login.html')
+    return render(request, 'pages/login.html')
 
-    return render(request, 'pages/loginpage.html')
+def user_logout(request):
+    logout(request)
+    return redirect('index')
 
 def index(request):
     return render(request, 'pages/index.html')
-    
+
 def menu(request):
-    return render(request, 'pages/menu.html')
+    items = MenuItem.objects.all()
+    return render(request, 'pages/menu.html', {'items': items})
 
 def order(request):
     if request.method == 'POST':
-        selected_item_ids = request.POST.getlist('selected_items')  # Get list of selected item IDs
+        selected_item_ids = request.POST.getlist('selected_items')
         selected_items = fooditems.objects.filter(id__in=selected_item_ids)
-
-        # You can add logic here to process the purchase (e.g., create an order, charge the user, etc.)
-        # For now, we'll just redirect to a success page
         return render(request, 'pages/order.html', {'selected_items': selected_items})
-    return redirect('manu')  # If not POST, redirect to the menu page
-
+    return redirect('manu')
 
 def contact(request):
     return render(request, 'pages/contact.html')
 
-def login(request):
+def show_login_page(request):  # Renamed to avoid conflict
     return render(request, 'pages/login.html')
+
 def viewmanu(request):
     return render(request, 'pages/viewmanu.html')
+
 def menu_item_detail(request, slug):
     menu_item = get_object_or_404(MenuItem, slug=slug)
     return render(request, 'menu_item_detail.html', {'menu_item': menu_item})
-
-

@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import render
 from .forms import forms
-from fooditems.models import fooditems
+from fooditems.models import fooditems,Order
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 def place_order(request):
     if request.method == 'POST':
@@ -28,20 +30,64 @@ def search_items(request):
 # Create your views here.
 def manu(request):
     manuitems = fooditems.objects.all()
-    return render(request, 'fooditems/manu.html', {'manuitems': manuitems})
+    user = request.user
+    return render(request, 'fooditems/manu.html', {'manuitems': manuitems, 'user': user})
 
 
-def buy_items(request): 
+
+def buy_items(request):
     print("buy items view")
+    if request.user.is_authenticated: 
+        if request.method == 'POST':
+            selected_item_ids = request.POST.getlist('selected_items')  # Get list of selected item IDs
+            selected_items = fooditems.objects.filter(id__in=selected_item_ids)  # Query items
+            total_price = sum(item.price for item in selected_items)  # Calculate total price
+
+            # Render the order success page with the selected items and total price
+            return render(request, 'fooditems/order_success.html', {
+                'selected_items': selected_items,
+                'total_price': total_price
+            })
+        return render('fooditems/oder_items.html', {'selected_items': selected_items}, {'total_price': total_price})  # If not POST, redirect to the menu page
+    else:
+        return redirect('login')  # If user is not authenticated, redirect to login page
+
+
+@login_required
+def order_items(request):
+    print("order items view")
+    # Fetch all items to display on the page
+    items = fooditems.objects.all()
+
     if request.method == 'POST':
         selected_item_ids = request.POST.getlist('selected_items')  # Get list of selected item IDs
-        selected_items = fooditems.objects.filter(id__in=selected_item_ids)
+        quantities = []
 
-        # You can add logic here to process the purchase (e.g., create an order, charge the user, etc.)
-        # For now, we'll just redirect to a success page
-        return render(request, 'fooditems/order_success.html', {'selected_items': selected_items})
-    return redirect('manu')  # If not POST, redirect to the menu page
+        # Loop through selected items to fetch the corresponding quantity
+        for item_id in selected_item_ids:
+            quantity_key = f"quantity_{item_id}"
+            quantity = request.POST.get(quantity_key, 1)  # Default to 1 if no quantity is provided
+            quantities.append(int(quantity))
 
+        # Process the purchase (create orders)
+        for item_id, quantity in zip(selected_item_ids, quantities):
+            item = fooditems.objects.get(id=item_id)
+            order = Order.objects.create(
+                user=request.user,
+                item=item,
+                quantity=quantity,
+                name=request.user.username,
+                email=request.user.email,
+                address=request.POST.get('address'),
+                phone=request.POST.get('phone')
+            )
+            order.save()
+
+        messages.success(request, 'Order placed successfully!')
+        return redirect('selectsuccess')  # Redirect to an order success page
+
+    # Pass the items to the template
+    return render(request, 'pages/order_items.html', {'items': items})
 
 def order_success(request):
     print("order success view")
@@ -58,4 +104,4 @@ def order_success(request):
     return redirect('menu')  # If not POST, redirect to menu page
 
 def selectsuccess(request):
-    return render(request, 'selectsuccess.html')
+    return render(request, 'fooditems/selectsuccess.html')

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Orders</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        nav {
+            background-color: #333;
+            padding: 10px;
+            text-align: center;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        .order-container {
+            margin: 20px;
+        }
+        .order-item {
+            background-color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .order-item img {
+            width: 100px;
+            height: 100px;
+            margin-right: 20px;
+        }
+        .order-details {
+            display: inline-block;
+            vertical-align: top;
+        }
+        .order-details h3 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+        .total-price {
+            font-size: 1.5em;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>hhhhh</h1>
+
+    <nav>
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'menu' %}">Menu</a></li>
+            <li><a href="{% url 'order' %}">Order</a></li>
+            <li><a href="{% url 'contact' %}">Contact</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
+        </ul>
+    </nav>
+
+    <div class="order-container">
+        <h2>Your Orders</h2>
+
+        {% if orders %}
+            {% for order in orders %}
+                <div class="order-item">
+                    <img src="{{ order.item.image.url }}" alt="{{ order.item.name }}">
+                    <div class="order-details">
+                        <h3>{{ order.item.name }}</h3>
+                        <p>Quantity: {{ order.quantity }}</p>
+                        <p>Price: ${{ order.item.price }}</p>
+                        <p>Total: ${{ order.item.price * order.quantity }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="total-price">
+                Total Price: ${{ total_price }}
+            </div>
+        {% else %}
+            <p>No orders found.</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>
