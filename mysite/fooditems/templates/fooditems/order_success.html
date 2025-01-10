@@ -223,7 +223,8 @@
             
             {% for item in selected_items %}
                 <div class="order-item" id="order-item-{{ item.id }}">
-                    <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                    <img src="{{ item.photo.url }}" alt="{{ item.name }}">
+                    <h1>hh</h1>
                     <div class="order-details">
                         <h3>{{ item.name }}</h3>
                         <p>{{ item.description }}</p>
