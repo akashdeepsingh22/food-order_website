@@ -164,14 +164,52 @@
             font-weight: bold;
             margin-top: 20px;
         }
+
+        /* Modified Form Styles */
+        .user-info {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-info label {
+            font-size: 1rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .user-info input, .user-info textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .user-info textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .user-info input[type="submit"] {
+            background-color: #2d6a4f;
+            color: white;
+            cursor: pointer;
+        }
+
+        .user-info input[type="submit"]:hover {
+            background-color: #1f4e3d;
+        }
+
     </style>
 </head>
 <body>
-    <h1>hhhhhhhhhhhhhhhhhhhhhh</h1>
     <nav>
         <ul>
             <li><a href="{% url 'index' %}">Home</a></li>
-            <li><a href="{% url 'menu' %}">Menu</a></li>
+            <li><a href="{% url 'manu' %}">Manu</a></li>
             <li><a href="{% url 'order' %}">Order</a></li>
             <li><a href="{% url 'contact' %}">Contact</a></li>
             <li><a href="{% url 'login' %}">Login</a></li>
@@ -190,43 +228,35 @@
                         <h3>{{ item.name }}</h3>
                         <p>{{ item.description }}</p>
                         <p>Price: ${{ item.price }}</p>
-
-                        <!-- Quantity Input -->
                         <label for="quantity-{{ item.id }}">Quantity:</label>
                         <input type="number" id="quantity-{{ item.id }}" name="quantity_{{ item.id }}" 
                                value="1" min="1" class="quantity-input" data-price="{{ item.price }}">
                     </div>
                 </div>
             {% endfor %}
-
-            <!-- User Information Form -->
             <div class="user-info">
                 <h3>Your Information</h3>
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" required placeholder="Enter your full name">
 
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email">
 
-                <label for="address">Address:</label>
-                <textarea id="address" name="address" rows="4" required></textarea>
+                <label for="address">Delivery Address:</label>
+                <textarea id="address" name="address" rows="4" required placeholder="Enter your address"></textarea>
 
                 <label for="phone">Phone Number:</label>
-                <input type="text" id="phone" name="phone" required>
+                <input type="text" id="phone" name="phone" required placeholder="Enter your phone number">
+                
+                <input type="submit" value="Place Order" class="order-now-btn">
             </div>
-
-            <!-- Total Price Display -->
             <div class="total-price">
                 Total Price: $<span id="total-price">{{ total_price }}</span>
             </div>
-
-            <!-- Order Now Button -->
-            <button type="submit" class="order-now-btn">Order Now</button>
         </form>
     </div>
 
     <script>
-        // Function to update the total price dynamically
         function updateTotalPrice() {
             let total = 0;
             document.querySelectorAll('.order-item').forEach(item => {
@@ -236,13 +266,14 @@
             });
             document.getElementById('total-price').textContent = total.toFixed(2);
         }
-
-        // Add event listeners to quantity inputs to update total on change
         document.querySelectorAll('.quantity-input').forEach(input => {
-            input.addEventListener('input', updateTotalPrice);
+            input.addEventListener('input', function() {
+                if (this.value < 1) {
+                    this.value = 1; 
+                }
+                updateTotalPrice();
+            });
         });
-
-        // Initial total price calculation
         updateTotalPrice();
     </script>
 </body>

@@ -92,26 +92,9 @@
     </style>
 </head>
 <body>
-            <div class="order-summary">
+           
                 <h3>Your Order Summary</h3>
-                {% for item in selected_items %}
-                    <div class="item-row">
-                        <span>{{ item.name }}</span>
-                        <span>x{{ item.quantity }}</span>
-                        <span>${{ item.price }}</span>
-                    </div>
-                {% endfor %}
-                
-                <!-- Total Price -->
-                <div class="total-price">
-                    Total: $<span id="total-price">{{ total_price }}</span>
-                </div>
-            </div>
-            
-            <!-- Submit Button -->
-            <button type="submit" class="submit-btn">Place Order</button>
-        </form>
-    </div>
+               
 
 </body>
 </html>

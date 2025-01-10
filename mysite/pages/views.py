@@ -22,7 +22,7 @@ def signup(request):
             user.save()
             messages.success(request, 'Account created successfully')
             return redirect('login')
-    return render(request, 'pages/signup.html')
+    return render(request, 'pages/login.html')
 
 def user_login(request):
     if request.method == 'POST':
@@ -44,10 +44,6 @@ def user_logout(request):
 
 def index(request):
     return render(request, 'pages/index.html')
-
-def menu(request):
-    items = MenuItem.objects.all()
-    return render(request, 'pages/menu.html', {'items': items})
 
 def order(request):
     if request.method == 'POST':

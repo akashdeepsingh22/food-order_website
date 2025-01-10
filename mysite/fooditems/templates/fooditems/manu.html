@@ -16,6 +16,83 @@
             min-height: 100vh;
         }
 
+        /* Navbar and Search Bar Styles */
+        nav {
+            background-color: #333;
+            padding: 14px 19px;
+            display: flex;
+            justify-content: space-between; /* Distribute items */
+            align-items: center;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            padding: 10px 15px;
+            border-radius: 4px;
+        }
+
+        nav ul li a.disabled {
+            color: grey;
+            pointer-events: none;
+        }
+
+        nav ul li a:hover {
+            background-color: #555;
+        }
+
+        /* New Search Bar Styles inside Navbar */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            max-width: 400px;
+            width: 100%;
+            margin-left: 20px; /* Space from the nav links */
+        }
+
+        .search-input {
+            padding: 10px;
+            font-size: 1em;
+            width: 100%;
+            border: 2px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #28a745;
+        }
+
+        .search-btn {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #28a745;
+            border: none;
+            border-radius: 20px;
+            margin-left: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background-color: #218838;
+            color: white;
+        }
+
+        /* Menu and Other Styles */
         .menu-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -58,104 +135,31 @@
             font-weight: bold;
         }
 
-        .buy-btn {  
+        .buy-btn {
             background-color: #ff7f50;
             border: none;
-            padding: 12px 25px;
-            font-size: 1.1em;
+            padding: 16px 40px; /* Increased padding to make it larger */
+            font-size: 1.3em; /* Increased font size */
             cursor: pointer;
             border-radius: 5px;
             transition: background-color 0.3s ease, transform 0.3s ease;
+            width: 100%; /* Makes the button full width */
         }
 
         .buy-btn:hover {
-            background-color: #ff5722;  
-            transform: scale(1.05); 
+            background-color: #ff5722;
+            transform: scale(1.05);
             text-decoration: none;
             color: white;
             font-weight: bold;
         }
 
-        .select-item {
-            margin: 10px 0;
-            text-align: left;
-        }
-
+        /* Center the button in the container */
         .submit-container {
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
+            padding: 20px 0;
         }
-
-        /* Search Bar Styling */
-        .search-bar {
-            margin: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .search-input {
-            padding: 10px;
-            font-size: 1.1em;
-            width: 80%;
-            max-width: 400px;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            
-        }
-
-        .search-btn {
-            padding: 10px 20px;
-            font-size: 1.1em;
-            cursor: pointer;
-            background-color: #ff7f50;
-            border: none;
-            border-radius: 5px;
-            margin-left: 10px;
-            transition: background-color 0.3s ease;
-        }
-
-        .search-btn:hover {
-            background-color: #ff5722;
-            color: white;
-        }
-        nav {
-    background-color: #333;
-    padding: 14px 19px;  
-}
-
-nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    margin: 0;
-    padding: 0;
-}
-
-nav ul li {
-    margin: 0 10px;  
-}
-
-nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-size: 16px; 
-    padding: 10px 15px;  
-    border-radius: 4px;
-}
-
-nav ul li a.disabled {
-    color: grey;
-    pointer-events: none;
-}
-
-nav ul li a:hover {
-    background-color: #555;
-}
-
-
     </style>
 </head>
 <body>
@@ -172,13 +176,15 @@ nav ul li a:hover {
                 <li><a href="{% url 'login' %}">Login</a></li>
             {% endif %}
         </ul>
+
+        <!-- Search Bar inside Navbar -->
+        <div class="search-bar">
+            <form method="GET" action="{% url 'search_items' %}" style="display: flex; width: 100%;">
+                <input type="text" name="query" class="search-input" placeholder="Search for food items..." value="{{ request.GET.query }}">
+                <button type="submit" class="search-btn">Search</button>
+            </form>
+        </div>
     </nav>
-    <div class="search-bar">
-        <form method="GET" action="{% url 'search_items' %}">
-            <input type="text" name="query" class="search-input" placeholder="Search for food items..." value="{{ request.GET.query }}">
-            <button type="submit" class="search-btn">Search</button>
-        </form>
-    </div>
 
     <form method="POST" action="{% url 'buy_items' %}" id="buyForm">
         {% csrf_token %}
