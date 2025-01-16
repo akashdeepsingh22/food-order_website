@@ -158,12 +158,18 @@ def remove_from_cart(request, item_id):
 def update_quantity(request, item_id):
     user = request.user
     item = fooditems.objects.get(id=item_id)
-    cart_item = cartitems.objects.get(user=user, item=item)
+
+    # Get or create the cart item for the given user and item
+    cart_item, created = cartitems.objects.get_or_create(user=user, item=item)
 
     if 'increase' in request.POST:
-        cart_item.quantity += 1  # Increase the quantity
+        cart_item.quantity += 1  # Increase the quantity of the item in the cart
     elif 'decrease' in request.POST and cart_item.quantity > 1:
-        cart_item.quantity -= 1  # Decrease the quantity
+        cart_item.quantity -= 1  # Decrease the quantity, ensuring it doesn't go below 1
     
+    # Save the updated cart item
     cart_item.save()
+
+    # Redirect to the cart page after updating the quantity
     return redirect('cart')
+
