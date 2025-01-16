@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        h1 {
+            color: #2e8b57; /* Dark Green */
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        p {
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        /* Cart Section */
+        .cart-container {
+            width: 80%;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-container ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .cart-container li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-container li:last-child {
+            border-bottom: none;
+        }
+
+        .cart-container li span {
+            font-weight: bold;
+        }
+
+        .empty-cart {
+            text-align: center;
+            font-size: 1.5em;
+            color: #ff6347; /* Tomato color for empty cart */
+        }
+
+        /* Button */
+        .btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #2e8b57;
+            color: white;
+            text-align: center;
+            font-size: 1.1em;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #228b22;
+        }
+
+        /* Quantity controls */
+        .quantity-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quantity-controls button {
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .quantity-controls button:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Cart, {{ user }}</h1>
+    <p>Here are the items you have added to your cart</p>
+
+    <div class="cart-container">
+        {% if items %}
+            <ul>
+                {% for item in items %}
+                    <li>
+                        <span>{{ item.quantity }} x {{ item.item.name }}</span>
+                        <span>${{ item.item.price }} each</span>
+                        <div class="quantity-controls">
+                            <!-- Remove item from cart -->
+                            <form method="post" action="{% url 'remove_from_cart' item.id %}">
+                                {% csrf_token %}
+                                <button type="submit">Remove</button>
+                            </form>
+
+                            <!-- Update item quantity -->
+                            <form method="post" action="{% url 'update_quantity' item.id %}">
+                                {% csrf_token %}
+                                <button type="submit" name="increase">+</button>
+                                <button type="submit" name="decrease">-</button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            <a href="#" class="btn">Proceed to Checkout</a>
+        {% else %}
+            <p class="empty-cart">Your cart is empty.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

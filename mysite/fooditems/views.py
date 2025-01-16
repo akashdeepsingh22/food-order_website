@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import render
 from .forms import forms
-from fooditems.models import fooditems,Order
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from .models import fooditems,Order,cartitems
+
 def profile(request):
     # Any additional context data for the profile page can be added here
     return render(request, 'fooditems/profile.html')
+
+@login_required(login_url='/login/')
 def place_order(request):
     if request.method == 'POST':
         form = forms(request.POST)
@@ -43,7 +46,7 @@ def manu(request):
     return render(request, 'fooditems/manu.html', {'manuitems': manuitems, 'user': user})
 
 
-
+@login_required(login_url='/login/')
 def buy_items(request):
     if request.user.is_authenticated:  # Check if the user is authenticated
         print("buy items view-------------------")
@@ -82,7 +85,7 @@ def select_success(request):
         'total_price': total_price  # Pass the total price to the template
     })    
 
-@login_required
+@login_required(login_url='/login/')
 def order_items(request):
     print("order items view=============")
     # Fetch all items to display on the page
@@ -121,3 +124,46 @@ def selectsuccess(request):
     for item in order_items:
         total_price += item.price
     return render(request, 'fooditems/selectsuccess.html',{'order_items': order_items,'total_price': total_price})
+from django.shortcuts import render, redirect
+from .models import cartitems, fooditems
+
+@login_required(login_url='/login/')
+def cart_view(request):
+    user = request.user
+    items = cartitems.objects.filter(user=user)
+    
+    if not items:
+        return render(request, 'fooditems/cart.html', {'message': 'Your cart is empty.', 'user': user})
+
+    return render(request, 'fooditems/cart.html', {'items': items, 'user': user})
+
+@login_required(login_url='/login/')
+def add_to_cart(request, item_id):
+    user = request.user
+    item = fooditems.objects.get(id=item_id)
+    cart_item, created = cartitems.objects.get_or_create(user=user, item=item)
+    cart_item.quantity += 1
+    cart_item.save()
+    return redirect('cart')
+
+@login_required(login_url='/login/')
+def remove_from_cart(request, item_id):
+    user = request.user
+    item = fooditems.objects.get(id=item_id)
+    cart_item = cartitems.objects.get(user=user, item=item)
+    cart_item.delete()  # Remove item from cart
+    return redirect('cart')
+
+@login_required(login_url='/login/')
+def update_quantity(request, item_id):
+    user = request.user
+    item = fooditems.objects.get(id=item_id)
+    cart_item = cartitems.objects.get(user=user, item=item)
+
+    if 'increase' in request.POST:
+        cart_item.quantity += 1  # Increase the quantity
+    elif 'decrease' in request.POST and cart_item.quantity > 1:
+        cart_item.quantity -= 1  # Decrease the quantity
+    
+    cart_item.save()
+    return redirect('cart')
