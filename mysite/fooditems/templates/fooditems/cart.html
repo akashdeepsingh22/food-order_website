@@ -35,27 +35,32 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .cart-container ul {
-            list-style: none;
-            padding: 0;
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
         }
 
-        .cart-container li {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        table, th, td {
+            border: 1px solid #ddd;
         }
 
-        .cart-container li:last-child {
-            border-bottom: none;
+        th, td {
+            padding: 12px;
+            text-align: center;
         }
 
-        .cart-container li span {
-            font-weight: bold;
+        th {
+            background-color: #2e8b57;
+            color: white;
         }
 
+        td {
+            background-color: #f9f9f9;
+        }
+
+        /* Empty Cart Message */
         .empty-cart {
             text-align: center;
             font-size: 1.5em;
@@ -64,26 +69,25 @@
 
         /* Button */
         .btn {
-            display: block;
-            width: 200px;
-            margin: 20px auto;
-            padding: 10px;
+            display: inline-block;
+            padding: 10px 20px;
             background-color: #2e8b57;
             color: white;
             text-align: center;
             font-size: 1.1em;
             border-radius: 5px;
             text-decoration: none;
+            margin-top: 20px;
         }
 
         .btn:hover {
             background-color: #228b22;
         }
 
-        /* Quantity controls */
+        /* Quantity Controls */
         .quantity-controls {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
         }
 
@@ -100,34 +104,51 @@
     </style>
 </head>
 <body>
-    <h1>Welcome to the Cart, {{ user }}</h1>
+    <h1>Welcome to the Cart, {{ user.username }}</h1>
     <p>Here are the items you have added to your cart</p>
 
     <div class="cart-container">
         {% if items %}
-            <ul>
-                {% for item in items %}
-                    <li>
-                        <span>{{ item.quantity }} x {{ item.item.name }}</span>
-                        <span>${{ item.item.price }} each</span>
-                        <div class="quantity-controls">
-                            <!-- Remove item from cart -->
-                            <form method="post" action="{% url 'remove_from_cart' item.id %}">
-                                {% csrf_token %}
-                                <button type="submit">Remove</button>
-                            </form>
-
-                            <!-- Update item quantity -->
-                            <form method="post" action="{% url 'update_quantity' item.id %}">
-                                {% csrf_token %}
-                                <button type="submit" name="increase">+</button>
-                                <button type="submit" name="decrease">-</button>
-                            </form>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cart_item in items %}
+                        <tr>
+                            <td>{{ cart_item.item.name }}</td>
+                            <td>${{ cart_item.item.price }}</td>
+                            <td>
+                                <div class="quantity-controls">
+                                    <form method="post" action="{% url 'update_quantity' cart_item.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" name="increase">+</button>
+                                    </form>
+                                    <span>{{ cart_item.quantity }}</span>
+                                    <form method="post" action="{% url 'update_quantity' cart_item.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" name="decrease">-</button>
+                                    </form>
+                                </div>
+                            </td>
+                            <td>
+                                <form method="post" action="{% url 'remove_from_cart' cart_item.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <p>Total: ${{ total_price }}</p>
             <a href="#" class="btn">Proceed to Checkout</a>
+            <a href="{% url 'manu' %}" class="btn">Add more items</a>
         {% else %}
             <p class="empty-cart">Your cart is empty.</p>
         {% endif %}

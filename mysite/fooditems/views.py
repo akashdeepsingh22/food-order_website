@@ -132,10 +132,16 @@ def cart_view(request):
     user = request.user
     items = cartitems.objects.filter(user=user)
     
+    # find total price
+    total_price = 0
+    for item in items:
+        total_price += item.item.price * item.quantity
+
+
     if not items:
         return render(request, 'fooditems/cart.html', {'message': 'Your cart is empty.', 'user': user})
 
-    return render(request, 'fooditems/cart.html', {'items': items, 'user': user})
+    return render(request, 'fooditems/cart.html', {'items': items, 'user': user, 'total_price': total_price})
 
 @login_required(login_url='/login/')
 def add_to_cart(request, item_id):
@@ -149,7 +155,8 @@ def add_to_cart(request, item_id):
 @login_required(login_url='/login/')
 def remove_from_cart(request, item_id):
     user = request.user
-    item = fooditems.objects.get(id=item_id)
+    cartitem = cartitems.objects.get(id=item_id)
+    item = fooditems.objects.get(id=cartitem.item_id)
     cart_item = cartitems.objects.get(user=user, item=item)
     cart_item.delete()  # Remove item from cart
     return redirect('cart')
@@ -157,7 +164,8 @@ def remove_from_cart(request, item_id):
 @login_required(login_url='/login/')
 def update_quantity(request, item_id):
     user = request.user
-    item = fooditems.objects.get(id=item_id)
+    cartitem = cartitems.objects.get(id=item_id)
+    item = fooditems.objects.get(id=cartitem.item_id)
 
     # Get or create the cart item for the given user and item
     cart_item, created = cartitems.objects.get_or_create(user=user, item=item)
