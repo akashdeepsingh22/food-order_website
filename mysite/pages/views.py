@@ -45,12 +45,7 @@ def user_logout(request):
 def index(request):
     return render(request, 'pages/index.html')
 
-def order(request):
-    if request.method == 'POST':
-        selected_item_ids = request.POST.getlist('selected_items')
-        selected_items = fooditems.objects.filter(id__in=selected_item_ids)
-        return render(request, 'pages/order.html', {'selected_items': selected_items})
-    return redirect('manu')
+
 
 def contact(request):
     return render(request, 'pages/contact.html')

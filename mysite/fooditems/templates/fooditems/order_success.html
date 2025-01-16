@@ -10,95 +10,86 @@
             padding: 0;
             box-sizing: border-box;
         }
-    
+
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
+            background-color: #f4f4f4;
         }
-    
+
+        /* Navbar Style */
         nav {
             background-color: #333;
-            padding: 10px;
+            padding: 14px 19px;
+            display: flex;
+            justify-content: space-between; /* Distribute items */
+            align-items: center;
+            position: relative;
+            z-index: 1; /* Ensure navbar stays below other content */
+            
         }
-    
+
         nav ul {
             list-style: none;
             display: flex;
-            justify-content: center;
+            margin: 0;
+            padding: 0;
+            
         }
-    
+
         nav ul li {
-            margin: 0 15px;
+            margin: 0 10px;
         }
-    
+
         nav ul li a {
-            color: white;
+            color: black;
             text-decoration: none;
-            font-size: 16px;
+            font-size: 20px;
             padding: 8px 12px;
             border-radius: 4px;
+            background-color: #ffcc00;
+            
         }
-    
-        nav ul li a.disabled {
-            color: grey;
-            pointer-events: none;
-        }
-    
+
         nav ul li a:hover {
             background-color: #555;
         }
-    
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
+
+        /* Active state for the current page */
+        nav ul li a.active {
+            color: grey;
+            pointer-events: none;
+           
         }
-    
+
         .order-container {
             padding: 20px;
         }
-    
-        .order-item {
-            background-color: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+        .order-table {
+            width: 100%;
+            border-collapse: collapse;
             margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: opacity 0.3s ease;
         }
-    
-        .order-item img {
-            max-width: 100px;
-            height: auto;
-            border-radius: 10px;
+
+        .order-table th, .order-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
         }
-    
-        .order-details {
-            flex: 1;
-            padding-left: 20px;
+
+        .order-table th {
+            background-color: #333;
+            color: white;
         }
-    
-        .order-details h3 {
-            font-size: 1.2rem;
-            margin: 0;
-        }
-    
-        .order-details p {
-            margin: 5px 0;
-            color: #777;
-        }
-    
+
         .quantity-input {
             width: 50px;
             padding: 5px;
             text-align: center;
             margin-right: 20px;
         }
-    
+
         .remove-btn {
             background-color: #ff4d4d;
             color: white;
@@ -107,11 +98,11 @@
             border-radius: 5px;
             cursor: pointer;
         }
-    
+
         .remove-btn:hover {
             background-color: #e63946;
         }
-    
+
         .update-btn {
             background-color: #ff7f50;
             color: white;
@@ -120,11 +111,11 @@
             border-radius: 5px;
             cursor: pointer;
         }
-    
+
         .update-btn:hover {
             background-color: #ff7f50;
         }
-    
+
         .checkout-btn {
             background-color: #2d6a4f;
             color: white;
@@ -136,12 +127,11 @@
             width: 100%;
             margin-top: 20px;
         }
-    
+
         .checkout-btn:hover {
             background-color: #1f4e3d;
         }
-    
-        /* Added Order Now Button */
+
         .order-now-btn {
             background-color: #4CAF50;
             color: white;
@@ -154,18 +144,18 @@
             margin-top: 20px;
             font-size: 1.2rem;
         }
-    
+
         .order-now-btn:hover {
             background-color: #45a049;
         }
-    
+
         .total-price {
             font-size: 1.5rem;
             font-weight: bold;
             margin-top: 20px;
+            text-align: right; /* Align to the right */
         }
 
-        /* Modified Form Styles */
         .user-info {
             background-color: #fff;
             padding: 20px;
@@ -209,34 +199,52 @@
     <nav>
         <ul>
             <li><a href="{% url 'index' %}">Home</a></li>
-            <li><a href="{% url 'manu' %}">Manu</a></li>
-            <li><a href="{% url 'order' %}">Order</a></li>
+            <li><a href="{% url 'manu' %}">Menu</a></li>
             <li><a href="{% url 'contact' %}">Contact</a></li>
-            <li><a href="{% url 'login' %}">Login</a></li>
         </ul>
     </nav>
 
     <div class="order-container">
         <h2>Your Selected Items</h2>
-        <form method="POST" action="{% url 'order_items' %}">
-            {% csrf_token %}
-            
-            {% for item in selected_items %}
-                <div class="order-item" id="order-item-{{ item.id }}">
-                    <img src="{{ item.photo.url }}" alt="{{ item.name }}">
-                    <h1>hh</h1>
-                    <div class="order-details">
-                        <h3>{{ item.name }}</h3>
-                        <p>{{ item.description }}</p>
-                        <p>Price: ${{ item.price }}</p>
-                        <label for="quantity-{{ item.id }}">Quantity:</label>
-                        <input type="number" id="quantity-{{ item.id }}" name="quantity_{{ item.id }}" 
-                               value="1" min="1" class="quantity-input" data-price="{{ item.price }}">
-                    </div>
-                </div>
-            {% endfor %}
-            <div class="user-info">
-                <h3>Your Information</h3>
+        <table class="order-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in selected_items %}
+                    <tr class="order-item" id="order-item-{{ item.id }}">
+                        <td><img src="{{ item.photo.url }}" alt="{{ item.name }}" style="max-width: 100px; height: auto; border-radius: 10px;"></td>
+                        <td>
+                            {% if item.description %}
+                                {{ item.description }}
+                            {% else %}
+                                No description available
+                            {% endif %}
+                        </td>
+                        <td>${{ item.price }}</td>
+                        <td>
+                            <input type="number" id="quantity-{{ item.id }}" name="quantity_{{ item.id }}" value="1" min="1" class="quantity-input" data-price="{{ item.price }}">
+                        </td>
+                        <td class="item-total">${{ item.price }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="total-price">
+            Total Price: $<span id="total-price">{{ total_price }}</span>
+        </div>
+
+        <div class="user-info">
+            <h3>Your Information</h3>
+            <form method="post" action="{% url 'order_items' %}">
+                {% csrf_token %}
                 <label for="name">Full Name:</label>
                 <input type="text" id="name" name="name" required placeholder="Enter your full name">
 
@@ -248,13 +256,10 @@
 
                 <label for="phone">Phone Number:</label>
                 <input type="text" id="phone" name="phone" required placeholder="Enter your phone number">
-                
+
                 <input type="submit" value="Place Order" class="order-now-btn">
-            </div>
-            <div class="total-price">
-                Total Price: $<span id="total-price">{{ total_price }}</span>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 
     <script>
@@ -263,18 +268,22 @@
             document.querySelectorAll('.order-item').forEach(item => {
                 const price = parseFloat(item.querySelector('.quantity-input').dataset.price);
                 const quantity = parseInt(item.querySelector('.quantity-input').value);
-                total += price * quantity;
+                const itemTotal = price * quantity;
+                item.querySelector('.item-total').textContent = '$' + itemTotal.toFixed(2);
+                total += itemTotal;
             });
             document.getElementById('total-price').textContent = total.toFixed(2);
         }
+
         document.querySelectorAll('.quantity-input').forEach(input => {
             input.addEventListener('input', function() {
                 if (this.value < 1) {
-                    this.value = 1; 
+                    this.value = 1;
                 }
                 updateTotalPrice();
             });
         });
+
         updateTotalPrice();
     </script>
 </body>

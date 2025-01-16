@@ -16,13 +16,15 @@
             min-height: 100vh;
         }
 
-        /* Navbar and Search Bar Styles */
+        /* Navbar Styles */
         nav {
             background-color: #333;
             padding: 14px 19px;
             display: flex;
             justify-content: space-between; /* Distribute items */
             align-items: center;
+            position: relative;
+            z-index: 1; /* Ensure navbar stays below other content */
         }
 
         nav ul {
@@ -37,11 +39,12 @@
         }
 
         nav ul li a {
-            color: white;
+            color: black;
             text-decoration: none;
             font-size: 20px;
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: 4px;
+            background-color: #ffcc00;
         }
 
         nav ul li a.disabled {
@@ -53,19 +56,33 @@
             background-color: #555;
         }
 
-        /* New Search Bar Styles inside Navbar */
-        .search-bar {
+        /* Profile and Login section alignment */
+        .profile-section {
             display: flex;
             align-items: center;
-            max-width: 400px;
-            width: 100%;
-            margin-left: 20px; /* Space from the nav links */
+            margin-left: auto; /* Push to the right */
+        }
+
+        .profile-section a {
+            color: white;
+            font-size: 18px;
+            margin-left: 10px;
+        }
+
+        /* Search Bar Styles */
+        .search-bar-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px; /* Space below the navbar */
+            padding: 10px;
         }
 
         .search-input {
             padding: 10px;
             font-size: 1em;
             width: 100%;
+            max-width: 500px;
             border: 2px solid #ccc;
             border-radius: 20px;
             outline: none;
@@ -114,9 +131,11 @@
             transform: scale(1.05);
         }
 
+        /* Fixed image size */
         .menu-image {
-            max-width: 100%;
-            height: auto;
+            width: 100%;  /* Ensure it occupies the full width of the container */
+            height: 200px; /* Fixed height for all images */
+            object-fit: cover;  /* Ensures the image is properly resized and cropped to fit the fixed size */
             border-radius: 10px;
         }
 
@@ -136,7 +155,7 @@
         }
 
         .buy-btn {
-            background-color: #ff7f50;
+            background-color:#ffcc00;
             border: none;
             padding: 16px 40px; /* Increased padding to make it larger */
             font-size: 1.3em; /* Increased font size */
@@ -147,8 +166,7 @@
         }
 
         .buy-btn:hover {
-            background-color: #ff5722;
-            
+            background-color: #ffcc00;
         }
 
         /* Center the button in the container */
@@ -163,35 +181,40 @@
     <nav>
         <ul>
             <li><a href="{% url 'index' %}">Home</a></li>
-            <li><a href="{% url 'manu' %}" >Menu</a></li>
-            <li><a href="{% url 'order' %}" >Order</a></li>
+            <li><a href="{% url 'manu' %}">Menu</a></li>
+            <li><a href="{% url 'buy_items' %}">cart</a></li>
             <li><a href="{% url 'contact' %}">Contact</a></li>
-            {% if user.is_authenticated %}
-                <li><a href="#">{{ user.username }}</a></li>
-                <li><a href="{% url 'logout' %}">Logout</a></li>
-            {% else %}
-                <li><a href="{% url 'login' %}">Login</a></li>
-            {% endif %}
         </ul>
 
-        <!-- Search Bar inside Navbar -->
-        <div class="search-bar">
-            <form method="GET" action="{% url 'search_items' %}" style="display: flex; width: 100%;">
-                <input type="text" name="query" class="search-input" placeholder="Search for food items..." value="{{ request.GET.query }}">
-                <button type="submit" class="search-btn">Search</button>
-            </form>
+        <!-- Profile section for authenticated user -->
+        <div class="profile-section">
+            {% if user.is_authenticated %}
+                <a href="#">{{ user.username }}</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+            {% endif %}
         </div>
     </nav>
+
+    <!-- Search Bar container, positioned below the navbar -->
+    <div class="search-bar-container">
+        <form method="GET" action="{% url 'search_items' %}" style="display: flex; width: 100%;">
+            <input type="text" name="query" class="search-input" placeholder="Search for food items..." value="{{ request.GET.query }}">
+            <button type="submit" class="search-btn">Search</button>
+        </form>
+    </div>
 
     <form method="POST" action="{% url 'buy_items' %}" id="buyForm">
         {% csrf_token %}
         <div class="menu-container">
             {% for fooditem in manuitems %}
                 <div class="menu-item">
-                    <img src="{{fooditem.photo.url}}" alt="{{ fooditem.name }}" class="menu-image">
+                    <img src="{{ fooditem.photo.url }}" alt="{{ fooditem.name }}" class="menu-image">
                     <h3>{{ fooditem.name }}</h3>
-                    <p>{{ fooditem.description }}</p>
-                    <p class="price">Price: ${{ fooditem.price }}</p>
+                    <!-- Display food item description -->
+                    <p>{{ fooditem.description }}</p> <!-- Displaying item description -->
+                    <p class="price">Price: ₹{{ fooditem.price }}</p>
                     <div class="select-item">
                         <input type="checkbox" name="selected_items" value="{{ fooditem.id }}" id="item-{{ fooditem.id }}">
                         <label for="item-{{ fooditem.id }}">Select</label>

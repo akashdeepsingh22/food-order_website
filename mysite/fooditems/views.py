@@ -4,7 +4,9 @@ from .forms import forms
 from fooditems.models import fooditems,Order
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
+def profile(request):
+    # Any additional context data for the profile page can be added here
+    return render(request, 'fooditems/profile.html')
 def place_order(request):
     if request.method == 'POST':
         form = forms(request.POST)
@@ -25,7 +27,14 @@ def search_items(request):
     else:
         manuitems = fooditems.objects.all()  # Show all items if no query is provided
 
-    return render(request, 'fooditems/manu.html', {'manuitems': manuitems})
+    # Get previously selected items (if any)
+    selected_items = request.POST.getlist('selected_items')  # Get a list of selected item IDs
+
+    # Return the food items and previously selected items to the template
+    return render(request, 'fooditems/manu.html', {
+        'manuitems': manuitems,
+        'selected_items': selected_items,
+    })
 
 # Create your views here.
 def manu(request):
@@ -36,72 +45,79 @@ def manu(request):
 
 
 def buy_items(request):
-    print("buy items view")
-    if request.user.is_authenticated: 
+    if request.user.is_authenticated:  # Check if the user is authenticated
+        print("buy items view-------------------")
         if request.method == 'POST':
+            print("post method buy items view-------------------") 
             selected_item_ids = request.POST.getlist('selected_items')  # Get list of selected item IDs
-            selected_items = fooditems.objects.filter(id__in=selected_item_ids)  # Query items
-            total_price = sum(item.price for item in selected_items)  # Calculate total price
+            selected_items = fooditems.objects.filter(id__in=selected_item_ids)  # Query items based on the selected IDs 
+            total_price = 0  # Variable to store total price
+            
+            request.session['selected_items'] = selected_item_ids
+            # Calculate total price based on the quantity of each selected item
+            for item in selected_items:
+                quantity = int(request.POST.get(f'quantity_{item.id}', 1))  # Get the quantity for the item, default to 1
+                item.total_price = item.price * quantity  # Add total price to item
+                total_price += item.total_price  # Accumulate the total price
 
-            # Render the order success page with the selected items and total price
             return render(request, 'fooditems/order_success.html', {
                 'selected_items': selected_items,
-                'total_price': total_price
+                'total_price': total_price  # Pass the total price to the template
             })
-        return render('fooditems/oder_items.html', {'selected_items': selected_items}, {'total_price': total_price})  # If not POST, redirect to the menu page
+        else:
+            # Handle GET request (if any)
+            return redirect('selectsuccess')  # You can redirect back to menu or show an appropriate page
     else:
-        return redirect('login')  # If user is not authenticated, redirect to login page
+        return redirect('login') 
+def select_success(request):
+    # Fetch the selected items and total price
+    selected_items = request.session.get('selected_items', [])
+    total_price = request.GET.get('total_price', 0)  # Get total price from URL or session
 
+    # Query items from the database based on selected item IDs
+    items = fooditems.objects.filter(id__in=selected_items)
+
+    return render(request, 'fooditems/order_success.html', {
+        'selected_items': items,
+        'total_price': total_price  # Pass the total price to the template
+    })    
 
 @login_required
 def order_items(request):
-    print("order items view")
+    print("order items view=============")
     # Fetch all items to display on the page
     items = fooditems.objects.all()
+    selected_item_ids = request.session.get('selected_items', [])
+    selected_items = fooditems.objects.filter(id__in=selected_item_ids)
+
+    # Process the order
 
     if request.method == 'POST':
-        selected_item_ids = request.POST.getlist('selected_items')  # Get list of selected item IDs
-        quantities = []
+        name = request.POST.get('name')
+        address = request.POST.get('address')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
 
-        # Loop through selected items to fetch the corresponding quantity
-        for item_id in selected_item_ids:
-            quantity_key = f"quantity_{item_id}"
-            quantity = request.POST.get(quantity_key, 1)  # Default to 1 if no quantity is provided
-            quantities.append(int(quantity))
-
-        # Process the purchase (create orders)
-        for item_id, quantity in zip(selected_item_ids, quantities):
-            item = fooditems.objects.get(id=item_id)
+        for item in selected_items:
+            print("item id",item.id,type(item))
             order = Order.objects.create(
                 user=request.user,
                 item=item,
-                quantity=quantity,
-                name=request.user.username,
-                email=request.user.email,
-                address=request.POST.get('address'),
-                phone=request.POST.get('phone')
+                name=name,
+                address=address,
+                phone=phone,
+                email=email
             )
             order.save()
-
         messages.success(request, 'Order placed successfully!')
         return redirect('selectsuccess')  # Redirect to an order success page
 
     # Pass the items to the template
     return render(request, 'pages/order_items.html', {'items': items})
-
-def order_success(request):
-    print("order success view")
-    # Get the selected items passed from the previous page
-    if request.method == 'POST':
-        selected_item_ids = request.POST.getlist('selected_items')
-        selected_items = fooditems.objects.filter(id__in=selected_item_ids)
-        
-        # Store the selected items in the session or pass it to the context
-        request.session['selected_items'] = selected_item_ids
-        
-        return render(request, 'fooditems/order_success.html', {'selected_items': selected_items})
-    
-    return redirect('menu')  # If not POST, redirect to menu page
-
 def selectsuccess(request):
-    return render(request, 'fooditems/selectsuccess.html')
+    order_item_ids = request.session.get('selected_items', [])
+    order_items = fooditems.objects.filter(id__in=order_item_ids)
+    total_price = 0
+    for item in order_items:
+        total_price += item.price
+    return render(request, 'fooditems/selectsuccess.html',{'order_items': order_items,'total_price': total_price})

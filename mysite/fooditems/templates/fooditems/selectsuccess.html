@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Confirmation</title>
+    <title>Order Success</title>
     <style>
         * {
             margin: 0;
@@ -43,6 +43,30 @@
             margin-bottom: 10px;
         }
 
+        .order-summary {
+            margin-top: 30px;
+            text-align: left;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-summary table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .order-summary th, .order-summary td {
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        .order-summary th {
+            background-color: #333;
+            color: white;
+        }
+
         .return-btn {
             background-color: #4CAF50;
             color: white;
@@ -70,10 +94,34 @@
 
     <div class="message">
         <p>Your order has been placed successfully! We’re processing your order and will notify you once it’s ready for delivery.</p>
+        
+        <!-- Displaying the order summary -->
+        <div class="order-summary">
+            <h2>Order Summary</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order_items %}
+                        <tr>
+                            <td>{{ item.name }}</td>
+                            <td>${{ item.price }}</td>
+                            <td>1</td> <!-- Assuming 1 as quantity for each item -->
+                            <td>${{ item.price }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h3>Total Price: ${{ total_price }}</h3>
+        </div>
 
-        
-        
-        <img src="" alt="Thank You Image" class="thank-you-img">
+        <img src="thank-you-image.jpg" alt="Thank You Image" class="thank-you-img">
     </div>
 
     <a href="{% url 'index' %}" class="return-btn">Return to Home</a>
