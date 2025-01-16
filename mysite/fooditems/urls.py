@@ -11,6 +11,10 @@ urlpatterns = [
     path('search/', views.search_items, name='search_items'),
     path('selectsuccess/',views.selectsuccess,name='selectsuccess'),
     path('profile/', views.profile, name='profile'),
+    path('cart/', views.cart_view, name='cart'),
+    path('add_to_cart/<int:item_id>/', views.add_to_cart, name='add_to_cart'),
+    path('remove_from_cart/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
+    path('update_quantity/<int:item_id>/', views.update_quantity, name='update_quantity'),
 ]
 
 if settings.DEBUG:

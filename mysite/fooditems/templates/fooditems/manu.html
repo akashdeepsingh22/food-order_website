@@ -131,6 +131,17 @@
             transform: scale(1.05);
         }
 
+        .menu-item a{
+            text-decoration: none;
+            background-color: #ffcc00;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            width: 100%;
+        }
+
         /* Fixed image size */
         .menu-image {
             width: 100%;  /* Ensure it occupies the full width of the container */
@@ -182,7 +193,7 @@
         <ul>
             <li><a href="{% url 'index' %}">Home</a></li>
             <li><a href="{% url 'manu' %}">Menu</a></li>
-            <li><a href="{% url 'buy_items' %}">cart</a></li>
+            <li><a href="{% url 'cart' %}">cart</a></li>
             <li><a href="{% url 'contact' %}">Contact</a></li>
         </ul>
 
@@ -215,10 +226,7 @@
                     <!-- Display food item description -->
                     <p>{{ fooditem.description }}</p> <!-- Displaying item description -->
                     <p class="price">Price: ₹{{ fooditem.price }}</p>
-                    <div class="select-item">
-                        <input type="checkbox" name="selected_items" value="{{ fooditem.id }}" id="item-{{ fooditem.id }}">
-                        <label for="item-{{ fooditem.id }}">Select</label>
-                    </div>
+                    <a href="{% url 'add_to_cart' fooditem.id %}">Add to Cart</a>
                 </div>
             {% endfor %}
         </div>
