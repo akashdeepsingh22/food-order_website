@@ -3,9 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Checkout</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: black;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1em;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        /* Checkout Section */
+        .checkout-container {
+            width: 80%;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            color: #2e8b57;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #ffcc00;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        /* Form Styles */
+        form {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        form div {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #ffcc00;
+            color: black;
+            font-size: 1.1em;
+            border-radius: 5px;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #228b22;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome</h1>
+
+    <!-- Navbar Section -->
+    <div class="navbar">
+        <a href="{% url 'index' %}">Home</a>
+        <a href="{% url 'cart' %}">Cart</a>
+        <a href="{% url 'manu' %}">Menu</a>
+    </div>
+
+    <!-- Checkout Content -->
+    <div class="checkout-container">
+        <h1>Checkout</h1>
+        <h2>Your Cart</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                    <tr>
+                        <td>{{ item.item.name }}</td>
+                        <td>₹{{ item.item.price }}</td>
+                        <td>{{ item.quantity }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Total Price: ₹{{ total_price }}</h3>
+
+        <!-- Checkout Form -->
+        <form method="post">
+            {% csrf_token %}
+            <div>
+                <label for="shipping_address">Shipping Address</label>
+                <input type="text" id="shipping_address" name="shipping_address" required>
+            </div>
+            <div>
+                <label for="phone_number">Phone Number</label>
+                <input type="text" id="phone_number" name="phone_number" required>
+            </div>
+            <div>
+                <label for="name">User Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div>
+                <label for="email">Email Id</label>
+                <input type="text" id="email" name="email" required>
+            </div>
+
+            <button type="submit">Place Order</button>
+        </form>
+    </div>
+
 </body>
 </html>

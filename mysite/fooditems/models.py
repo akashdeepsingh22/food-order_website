@@ -18,10 +18,11 @@ class Order(models.Model):
     email = models.EmailField()
     address = models.TextField()
     phone = models.CharField(max_length=15)
+    total_price = models.DecimalField(max_digits=6, decimal_places=2,default=0)
     
 
     def __str__(self):
-        return f"{self.quantity} x {self.item.name}"
+        return f"{self.quantity}"
 
     
 class cartitems(models.Model):

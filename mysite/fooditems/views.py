@@ -1,9 +1,50 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.shortcuts import render
 from .forms import forms
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import fooditems,Order,cartitems
+@login_required
+def checkout(request):
+    # Get the user's cart items
+    cart_items = cartitems.objects.filter(user=request.user)
+    
+    # Calculate total price
+    total_price = sum(item.item.price * item.quantity for item in cart_items)
+    
+    # Handle POST request if the user submits the checkout form
+    if request.method == 'POST':
+        # Retrieve user data for shipping, payment, etc.
+        shipping_address = request.POST.get('shipping_address')
+        phone_number = request.POST.get('phone_number')
+        user=request.POST.get('name')
+        user_email=request.POST.get('email')
+        
+        # Create a new order in the database
+        order = Order.objects.create(
+            user=request.user,
+            address=shipping_address,
+            phone=phone_number,
+            name=user,
+            email=user_email
+
+        )
+        
+        # Add the items from the cart to the order
+        #for item in cart_items:
+            #order.items.add(item)
+        
+        # Clear the cart
+        cart_items.delete()
+
+        # Redirect to an order confirmation page
+        return redirect('order_confirmation', order_id=order.id)
+    return render(request, 'fooditems/checkout.html', {'cart_items': cart_items, 'total_price': total_price})
+@login_required
+def order_confirmation(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    return render(request, 'fooditems/order confirmation.html', {'order': order})
+
 
 def profile(request):
     # Any additional context data for the profile page can be added here
@@ -148,7 +189,7 @@ def add_to_cart(request, item_id):
     user = request.user
     item = fooditems.objects.get(id=item_id)
     cart_item, created = cartitems.objects.get_or_create(user=user, item=item)
-    cart_item.quantity += 1
+    cart_item.quantity = 1
     cart_item.save()
     return redirect('cart')
 

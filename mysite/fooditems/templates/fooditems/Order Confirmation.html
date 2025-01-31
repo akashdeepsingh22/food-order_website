@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: black;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1em;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        /* Order Confirmation Section */
+        .order-container {
+            width: 80%;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            color: #2e8b57;
+        }
+
+        p {
+            font-size: 1.1em;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        .order-details {
+            margin-bottom: 20px;
+        }
+
+        /* Button */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #2e8b57;
+            color: white;
+            text-align: center;
+            font-size: 1.1em;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: #228b22;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar Section -->
+    <div class="navbar">
+        <a href="{% url 'index' %}">Home</a>
+        <a href="{% url 'cart' %}">Cart</a>
+        <a href="{% url 'manu' %}">Menu</a>
+        <a href="{% url 'checkout' %}">Checkout</a>
+    </div>
+
+    <!-- Order Confirmation Content -->
+    <div class="order-container">
+        <h1>Thank you for your order, {{ order.user.username }}!</h1>
+
+        <div class="order-details">
+            <h2>Your Order Details:</h2>
+            <p><strong>Order ID:</strong> {{ order.id }}</p>
+            <p><strong>Total Price:</strong> ₹{{ order.total_price }}</p>
+            <p><strong>Shipping Address:</strong> {{ order.address }}</p>
+            <p><strong>Phone Number:</strong> {{ order.phone }}</p>
+            <p><strong>Email Address:</strong> {{ order.email }}</p>
+        </div>
+
+        <h3>Items Ordered:</h3>
+        <ul>
+            {% for item in order.items.all %}
+                <li>{{ item.item.name }} - {{ item.quantity }} x ${{ item.item.price }} </li>
+            {% endfor %}
+        </ul>
+
+        <a href="{% url 'index' %}" class="btn">Back to Home</a>
+    </div>
+
+</body>
+</html>

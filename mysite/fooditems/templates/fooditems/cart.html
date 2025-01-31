@@ -14,15 +14,22 @@
             color: #333;
         }
 
-        h1 {
-            color: #2e8b57; /* Dark Green */
+        /* Navbar Styles */
+        .navbar {
+            background-color:black;
+            padding: 15px;
             text-align: center;
-            margin-top: 20px;
         }
 
-        p {
-            text-align: center;
-            font-size: 1.2em;
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1em;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
         }
 
         /* Cart Section */
@@ -52,7 +59,7 @@
         }
 
         th {
-            background-color: #2e8b57;
+            background-color: #ffcc00;
             color: white;
         }
 
@@ -71,8 +78,8 @@
         .btn {
             display: inline-block;
             padding: 10px 20px;
-            background-color: #2e8b57;
-            color: white;
+            background-color: #ffcc00;
+            color: black;
             text-align: center;
             font-size: 1.1em;
             border-radius: 5px;
@@ -81,7 +88,7 @@
         }
 
         .btn:hover {
-            background-color: #228b22;
+            background-color: #ffcc00;
         }
 
         /* Quantity Controls */
@@ -101,9 +108,29 @@
         .quantity-controls button:hover {
             background-color: #ddd;
         }
+
+        /* Page Header */
+        h1 {
+            color: #2e8b57; /* Dark Green */
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        p {
+            text-align: center;
+            font-size: 1.2em;
+        }
     </style>
 </head>
 <body>
+    <!-- Navbar Section -->
+    <div class="navbar">
+        <a href="{% url 'index' %}">Home</a>
+        <a href="{% url 'manu' %}">Menu</a>
+        <a href="{% url 'checkout' %}">Checkout</a>
+    </div>
+
+    <!-- Cart Content -->
     <h1>Welcome to the Cart, {{ user.username }}</h1>
     <p>Here are the items you have added to your cart</p>
 
@@ -122,7 +149,7 @@
                     {% for cart_item in items %}
                         <tr>
                             <td>{{ cart_item.item.name }}</td>
-                            <td>${{ cart_item.item.price }}</td>
+                            <td>₹{{ cart_item.item.price }}</td>
                             <td>
                                 <div class="quantity-controls">
                                     <form method="post" action="{% url 'update_quantity' cart_item.id %}">
@@ -146,8 +173,8 @@
                     {% endfor %}
                 </tbody>
             </table>
-            <p>Total: ${{ total_price }}</p>
-            <a href="#" class="btn">Proceed to Checkout</a>
+            <p>Total: ₹{{ total_price }}</p>
+            <a href="{% url 'checkout' %}" class="btn">Proceed to Checkout</a>
             <a href="{% url 'manu' %}" class="btn">Add more items</a>
         {% else %}
             <p class="empty-cart">Your cart is empty.</p>

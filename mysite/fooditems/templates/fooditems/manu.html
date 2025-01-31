@@ -176,10 +176,6 @@
             width: 100%; /* Makes the button full width */
         }
 
-        .buy-btn:hover {
-            background-color: #ffcc00;
-        }
-
         /* Center the button in the container */
         .submit-container {
             display: flex;
@@ -229,10 +225,6 @@
                     <a href="{% url 'add_to_cart' fooditem.id %}">Add to Cart</a>
                 </div>
             {% endfor %}
-        </div>
-
-        <div class="submit-container">
-            <button type="submit" class="buy-btn">Buy Selected Items</button>
         </div>
     </form>
 
